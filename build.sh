@@ -5,5 +5,4 @@ mkdir -p build
 cd build
 clang++ -std=c++17 -Wall -c ../game.cpp ../main.cpp -I${SFML_INCLUDE_DIR}
 clang++ main.o game.o -o xonix -L${SFML_LIB_DIR} ${SFML_LIBRARIES}
-cp xonix ../xonix
 cd ..

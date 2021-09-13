@@ -96,7 +96,6 @@ void Game::initVariables(){
 	this->window = nullptr;
 
 	// Game logic
-	this->endGame = false;
 	this->life = 3;
 	this->areaToWin = 80.0f;
 	this->numEnemiesInside = 0;
@@ -215,6 +214,8 @@ Game::Game(){
     std::random_device rd;
 	this->randomGenerator.seed(rd());
 
+	this->gameState = GameState::PLAY;
+
 	this->initVariables();
 	this->initWindow();
 	this->grid.init();
@@ -224,10 +225,6 @@ Game::Game(){
 
 const bool Game::running() const {
 	return this->window->isOpen();
-}
-
-const bool Game::getEndGame() const{
-	return this->endGame;
 }
 
 void Game::pollEvents(){
@@ -369,7 +366,6 @@ void Game::updatePlayer(){
 		this->grid.changeStatus(TileStatus::NewFilled, TileStatus::Filled);
 	} else if (this->grid.get(player.y, player.x) == TileStatus::NewFilled) {
 		// Inner loop, we hit our own trace
-		// TODO - Lose life and reset
 		this->grid.changeStatus(TileStatus::NewFilled, TileStatus::Empty);
 		lose();
 	}
@@ -427,7 +423,7 @@ void Game::update() {
 
 	this->pollEvents();
 
-	if (this->endGame == false)
+	if (this->gameState == GameState::PLAY)
 	{
 		if (this->timer > moveDelay){
 			this->updatePlayer();
@@ -439,7 +435,8 @@ void Game::update() {
 
 	// End game condition
 	if (this->life <= 0){
-		this->endGame = true;	
+		this->gameState = GameState::END;
+		this->window->close();
 	}
 }
 

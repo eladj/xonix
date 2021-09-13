@@ -40,6 +40,11 @@ constexpr enum TileStatus operator~(const enum TileStatus a){
     return (enum TileStatus)~(std::underlying_type<TileStatus>::type(a));
 }
 
+enum GameState{
+    PLAY = 0,
+    END = 1
+};
+
 
 class Grid {
 private:
@@ -96,6 +101,8 @@ private:
 	// Text
 	sf::Text uiText;
 
+    GameState gameState;
+
     // Keyboard Inputs
     bool leftPressed;
     bool rightPressed;
@@ -103,7 +110,6 @@ private:
     bool downPressed;
 
 	// Game logic
-	bool endGame;
     int life;     // Player's health
     int numEnemiesInside;  // Number of enemies inside the filled area
     int numEnemiesOutside;  // Number of enemies in the unfilled area
@@ -127,7 +133,6 @@ public:
     Game();
 
     const bool running() const;
-    const bool getEndGame() const;
 
     void pollEvents();
 
